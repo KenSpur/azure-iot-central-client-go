@@ -67,7 +67,7 @@ func (c *Client) CreateDevice(device DeviceRequest) (*DeviceResponse, error) {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s/api/devices?api-version=2022-10-31-preview", c.HostURL), strings.NewReader(string(d)))
+	req, err := http.NewRequest("PUT", fmt.Sprintf("%s/api/devices?api-version=2022-10-31-preview", c.HostURL), strings.NewReader(string(d)))
 	if err != nil {
 		return nil, err
 	}

@@ -67,7 +67,7 @@ func (c *Client) CreateOrganization(organization OrganizationRequest) (*Organiza
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s/api/organizations?api-version=2022-10-31-preview", c.HostURL), strings.NewReader(string(o)))
+	req, err := http.NewRequest("PUT", fmt.Sprintf("%s/api/organizations?api-version=2022-10-31-preview", c.HostURL), strings.NewReader(string(o)))
 	if err != nil {
 		return nil, err
 	}
