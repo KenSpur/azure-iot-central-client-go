@@ -1,25 +1,55 @@
 package iotcentral
 
-type deviceCollection struct {
-	Value    []Device `json:"value"`
-	NextLink string   `json:"nextLink"`
+/////////////////////////
+// Device
+/////////////////////////
+
+type deviceCollectionResponse struct {
+	Value    []DeviceResponse `json:"value"`
+	NextLink string           `json:"nextLink,omitempty"`
 }
 
-// Device -
-type Device struct {
+// DeviceResponse -
+type DeviceResponse struct {
 	ID            string   `json:"id"`
 	Etag          string   `json:"etag"`
 	DisplayName   string   `json:"displayName"`
-	Template      string   `json:"template"`
+	Template      string   `json:"template,omitempty"`
 	Simulated     bool     `json:"simulated"`
 	Provisioned   bool     `json:"provisioned"`
 	Enabled       bool     `json:"enabled"`
-	Organizations []string `json:"organizations"`
+	Organizations []string `json:"organizations,omitempty"`
+}
+
+// DeviceRequest -
+type DeviceRequest struct {
+	Etag          string   `json:"etag,omitempty"`
+	DisplayName   string   `json:"displayName,omitempty"`
+	Template      string   `json:"template,omitempty"`
+	Simulated     bool     `json:"simulated,omitempty"`
+	Provisioned   bool     `json:"provisioned,omitempty"`
+	Enabled       bool     `json:"enabled,omitempty"`
+	Organizations []string `json:"organizations,omitempty"`
+}
+
+/////////////////////////
+// Organization
+/////////////////////////
+
+type organizationCollectionResponse struct {
+	Value    []OrganizationResponse `json:"value"`
+	NextLink string                 `json:"nextLink,omitempty"`
 }
 
 // Organization -
-// type Organization struct {
-// 	ID          string `json:"id"`
-// 	DisplayName string `json:"displayName"`
-// 	Parent      string `json:"parent"`
-// }
+type OrganizationResponse struct {
+	ID          string `json:"id"`
+	DisplayName string `json:"displayName"`
+	Parent      string `json:"parent,omitempty"`
+}
+
+// OrganizationRequest -
+type OrganizationRequest struct {
+	DisplayName string `json:"displayName,omitempty"`
+	Parent      string `json:"parent,omitempty"`
+}

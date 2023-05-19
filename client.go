@@ -1,7 +1,6 @@
 package iotcentral
 
 import (
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -25,25 +24,21 @@ func NewClient(host, token *string) (*Client, error) {
 	return &c, nil
 }
 
-func (c *Client) doRequest(req *http.Request) ([]byte, error) {
+func (c *Client) doRequest(req *http.Request) ([]byte, int, error) {
 	token := c.Token
 
 	req.Header.Set("Authorization", "Bearer "+token)
 
 	res, err := c.HTTPClient.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, res.StatusCode, err
 	}
 	defer res.Body.Close()
 
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return nil, err
+		return nil, res.StatusCode, err
 	}
 
-	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("status: %d, body: %s", res.StatusCode, body)
-	}
-
-	return body, err
+	return body, res.StatusCode, err
 }
