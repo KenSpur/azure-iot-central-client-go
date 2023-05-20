@@ -60,17 +60,19 @@ func (c *Client) GetDevice(deviceID string) (*DeviceResponse, error) {
 }
 
 // CreateDevice - Create new device
-func (c *Client) CreateDevice(device DeviceRequest) (*DeviceResponse, error) {
+func (c *Client) CreateDevice(deviceID string, device DeviceRequest) (*DeviceResponse, error) {
 	d, err := json.Marshal(device)
 
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("PUT", fmt.Sprintf("%s/api/devices?api-version=2022-10-31-preview", c.HostURL), strings.NewReader(string(d)))
+	req, err := http.NewRequest("PUT", fmt.Sprintf("%s/api/devices/%s?api-version=2022-10-31-preview", c.HostURL, deviceID), strings.NewReader(string(d)))
 	if err != nil {
 		return nil, err
 	}
+
+	req.Header.Set("Content-Type", "application/json")
 
 	body, statusCode, err := c.doRequest(req)
 	if err != nil {
@@ -101,6 +103,8 @@ func (c *Client) UpdateDevice(deviceID string, device DeviceRequest) (*DeviceRes
 	if err != nil {
 		return nil, err
 	}
+
+	req.Header.Set("Content-Type", "application/json")
 
 	body, statusCode, err := c.doRequest(req)
 	if err != nil {

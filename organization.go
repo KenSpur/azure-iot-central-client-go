@@ -60,17 +60,19 @@ func (c *Client) GetOrganization(organizationID string) (*OrganizationResponse, 
 }
 
 // CreateOrganization - Create new organization
-func (c *Client) CreateOrganization(organization OrganizationRequest) (*OrganizationResponse, error) {
+func (c *Client) CreateOrganization(organizationID string, organization OrganizationRequest) (*OrganizationResponse, error) {
 	o, err := json.Marshal(organization)
 
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("PUT", fmt.Sprintf("%s/api/organizations?api-version=2022-10-31-preview", c.HostURL), strings.NewReader(string(o)))
+	req, err := http.NewRequest("PUT", fmt.Sprintf("%s/api/organizations/%s?api-version=2022-10-31-preview", c.HostURL, organizationID), strings.NewReader(string(o)))
 	if err != nil {
 		return nil, err
 	}
+
+	req.Header.Set("Content-Type", "application/json")
 
 	body, statusCode, err := c.doRequest(req)
 	if err != nil {
@@ -101,6 +103,8 @@ func (c *Client) UpdateOrganization(organizationID string, organization Organiza
 	if err != nil {
 		return nil, err
 	}
+
+	req.Header.Set("Content-Type", "application/json")
 
 	body, statusCode, err := c.doRequest(req)
 	if err != nil {

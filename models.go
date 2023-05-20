@@ -24,10 +24,9 @@ type DeviceResponse struct {
 // DeviceRequest -
 type DeviceRequest struct {
 	Etag          string   `json:"etag,omitempty"`
-	DisplayName   string   `json:"displayName,omitempty"`
+	DisplayName   string   `json:"displayName"`
 	Template      string   `json:"template,omitempty"`
 	Simulated     bool     `json:"simulated,omitempty"`
-	Provisioned   bool     `json:"provisioned,omitempty"`
 	Enabled       bool     `json:"enabled,omitempty"`
 	Organizations []string `json:"organizations,omitempty"`
 }
