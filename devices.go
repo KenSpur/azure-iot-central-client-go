@@ -9,29 +9,37 @@ import (
 
 // GetDevices - Returns a list of devices
 func (c *Client) GetDevices() ([]DeviceResponse, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/api/devices?api-version=2022-10-31-preview", c.HostURL), nil)
-	if err != nil {
-		return nil, err
+	url := fmt.Sprintf("%s/api/devices?api-version=2022-10-31-preview", c.HostURL)
+	var allDevices []DeviceResponse
+
+	for url != "" {
+		req, err := http.NewRequest("GET", url, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		body, statusCode, err := c.doRequest(req)
+		if err != nil {
+			return nil, err
+		}
+
+		if statusCode != http.StatusOK {
+			return nil, fmt.Errorf("status: %d, body: %s", statusCode, body)
+		}
+
+		deviceCollection := deviceCollectionResponse{}
+		err = json.Unmarshal(body, &deviceCollection)
+		if err != nil {
+			return nil, err
+		}
+
+		allDevices = append(allDevices, deviceCollection.Value...)
+
+		// Update the URL to the next page if it's available, otherwise break the loop
+		url = deviceCollection.NextLink
 	}
 
-	body, statusCode, err := c.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
-
-	if statusCode != http.StatusOK {
-		return nil, fmt.Errorf("status: %d, body: %s", statusCode, body)
-	}
-
-	deviceCollection := deviceCollectionResponse{}
-	err = json.Unmarshal(body, &deviceCollection)
-	if err != nil {
-		return nil, err
-	}
-
-	devices := deviceCollection.Value
-
-	return devices, nil
+	return allDevices, nil
 }
 
 // GetDevice - Returns a specifc device
