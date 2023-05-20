@@ -1,4 +1,4 @@
-# Azure Iot Central Client (Go)
+# 💻 Azure Iot Central Client (Go)
 
 A Go library for interacting with the Azure IoT Central API.
 
