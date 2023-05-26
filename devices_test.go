@@ -45,10 +45,18 @@ func TestDeviceFunctions(t *testing.T) {
 	devices, err := client.GetDevices()
 	assert.NoError(t, err, "Failed to get devices")
 
+	var ids []string
+	for _, device := range devices {
+		ids = append(ids, device.ID)
+	}
+
 	var displayNames []string
 	for _, device := range devices {
 		displayNames = append(displayNames, device.DisplayName)
 	}
+
+	assert.Contains(t, ids, deviceOne.ID, "IDs does not contain device one")
+	assert.Contains(t, ids, deviceTwo.ID, "IDs does not contain device two")
 
 	assert.Contains(t, displayNames, deviceOne.DisplayName, "Display names does not contain device one")
 	assert.Contains(t, displayNames, deviceTwo.DisplayName, "Display names does not contain device two")

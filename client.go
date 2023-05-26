@@ -1,6 +1,7 @@
 package iotcentral
 
 import (
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -15,6 +16,13 @@ type Client struct {
 
 // NewClient -
 func NewClient(host, token *string) (*Client, error) {
+	if host == nil || *host == "" {
+		return nil, errors.New("host is nil or empty")
+	}
+	if token == nil || *token == "" {
+		return nil, errors.New("token is nil or empty")
+	}
+
 	c := Client{
 		HostURL:    *host,
 		HTTPClient: &http.Client{Timeout: 10 * time.Second},
@@ -25,8 +33,11 @@ func NewClient(host, token *string) (*Client, error) {
 }
 
 func (c *Client) doRequest(req *http.Request) ([]byte, int, error) {
-	token := c.Token
+	if c == nil {
+		return nil, 0, errors.New("client is nil")
+	}
 
+	token := c.Token
 	req.Header.Set("Authorization", "Bearer "+token)
 
 	res, err := c.HTTPClient.Do(req)
