@@ -52,3 +52,18 @@ type OrganizationRequest struct {
 	DisplayName string `json:"displayName,omitempty"`
 	Parent      string `json:"parent,omitempty"`
 }
+
+/////////////////////////
+// Role
+/////////////////////////
+
+type roleCollectionResponse struct {
+	Value    []RoleResponse `json:"value"`
+	NextLink string         `json:"nextLink,omitempty"`
+}
+
+// Role -
+type RoleResponse struct {
+	ID          string `json:"id"`
+	DisplayName string `json:"displayName"`
+}
