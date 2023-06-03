@@ -27,8 +27,17 @@ func TestRoleFunctions(t *testing.T) {
 	// GetRole
 	roleID := "ca310b8d-2f4a-44e0-a36e-957c202cd8d4"
 	role, err := client.GetRole(roleID)
-	assert.NoError(t, err, "Failed to get role one")
+	assert.NoError(t, err, "Failed to get role")
 
-	assert.Equal(t, role.ID, roleID, "Role ID does not match")
-	assert.Equal(t, role.DisplayName, "Administrator", "Role DisplayName does not match (Administrator)")
+	assert.Equal(t, roleID, role.ID, "Role ID does not match")
+	assert.Equal(t, "Administrator", role.DisplayName, "Role DisplayName does not match (Administrator)")
+
+	// GetRoleByName
+	roleName := "App Builder"
+	role, err = client.GetRoleByName(roleName)
+
+	assert.NoError(t, err, "Failed to get role by name")
+
+	assert.Equal(t, "Builder", role.DisplayName, "Role DisplayName does not match (Administrator)")
+	assert.Equal(t, "344138e9-8de4-4497-8c54-5237e96d6aaf", role.ID, "Role ID does not match (344138e9-8de4-4497-8c54-5237e96d6aaf)")
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 // GetRoles - Returns a list of roles
@@ -64,4 +65,36 @@ func (c *Client) GetRole(roleID string) (*RoleResponse, error) {
 	}
 
 	return &role, nil
+}
+
+// GetRoleByName - Returns a specifc role
+func (c *Client) GetRoleByName(name string) (*RoleResponse, error) {
+	cleanName := cleanName(name)
+	roles, err := c.GetRoles()
+	if err != nil {
+		return nil, err
+	}
+
+	roleResponse := RoleResponse{}
+	for _, role := range roles {
+		if role.DisplayName == cleanName {
+			roleResponse = role
+			break
+		}
+	}
+
+	if roleResponse.ID == "" {
+		return nil, fmt.Errorf("role not found for name: %s", name)
+	}
+
+	return &roleResponse, nil
+}
+
+func cleanName(name string) string {
+	switch name {
+	case "App Administrator", "App Builder", "App Operator":
+		name = strings.TrimPrefix(name, "App ")
+	}
+
+	return name
 }
