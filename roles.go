@@ -94,6 +94,8 @@ func cleanName(name string) string {
 	switch name {
 	case "App Administrator", "App Builder", "App Operator":
 		name = strings.TrimPrefix(name, "App ")
+	case "Org Administrator":
+		name = "Org Admin"
 	}
 
 	return name
